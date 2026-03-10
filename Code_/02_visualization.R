@@ -62,6 +62,7 @@ plot(b3,col=clb)
 plot(b4,col=clg)
 plot(b8,col=clr)
 
+#stack
 sentinel <- c(b2, b3, b4, b8)
 plot(sentinel)
 plot(sentinel, col=plasma(100))
@@ -84,4 +85,56 @@ max values  :            6903,            6780,            7229,            7313
 
 plot(sentinel[[4]])
 
-# stack 
+# sist rife 
+install.packages("ggplot2")
+library(ggplot2)
+im.import("sentinel.dolomites.b2.tif")
+b2 <- im.import("sentinel.dolomites.b2.tif")
+b3 <- im.import("sentinel.dolomites.b3.tif")
+b4 <- im.import("sentinel.dolomites.b4.tif")
+b8 <- im.import("sentinel.dolomites.b8.tif")
+install.packages("patchwork")
+library(patchwork)
+
+p1<- im.ggplot(b8)
+p2<- im.ggplot(b4)
+p1+p2
+
+# rgb plotting
+sentinel <- c(b2, b3, b4, b8)
+#1=b2 blue
+#2=b3 green
+#3=b4 red
+#4=b8 nir
+
+im.plotRGB(sentinel, r=3, g=2, b=1) #colori naturali
+#vogliamo aggiungere la banda infrarosso
+im.plotRGB(sentinel, r=4, g=3, b=2) #false colors
+
+im.multiframe(1,2)
+im.plotRGB(sentinel, r=3, g=2, b=1) 
+im.plotRGB(sentinel, r=4, g=3, b=2) 
+
+plot(sentinel[[4]])
+im.plotRGB(sentinel, r=4, g=3, b=2)
+#NIR on green
+im.plotRGB(sentinel, r=3, g=4, b=2)
+#NIR on blue
+im.plotRGB(sentinel, r=3, g=2, b=4)
+
+#plot 4 manners of rgb in un solo multiframe
+im.multiframe(1,4)
+im.plotRGB(sentinel, r=3, g=2, b=1)
+im.plotRGB(sentinel, r=4, g=3, b=2)
+im.plotRGB(sentinel, r=3, g=4, b=2)
+im.plotRGB(sentinel, r=3, g=2, b=4)
+
+im.plotRGB(sentinel, 4, 2, 3) #più semplice
+
+
+plotRGB(sentinel, 4, 2, 3, stretch="lin")
+plotRGB(sentinel, 4, 2, 3, stretch="hist") #stretch serve per estendere la banda dei valori medi?
+
+
+
+pairs(sentinel)
