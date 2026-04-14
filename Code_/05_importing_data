@@ -1,0 +1,79 @@
+library(terra)
+library(viridis)
+library(imageRy)
+library(patchwork)
+setwd("C:/Users/Giada/OneDrive/Documenti/doc UNIBO/immagini telerilevamento")
+getwd()
+list.files()
+
+gre<- rast("DJI_20260409152942_0001_MS_G.tiff")
+plot(gre)
+gre<- flip(gre)
+plot(gre)
+plot(gre, col=mako(100))
+
+red<- rast("DJI_20260409152942_0001_MS_NIR.tiff")
+red<- flip(red)
+plot(red)
+
+nir<- rast("DJI_20260409152942_0001_MS_R.tiff")
+nir<- flip(nir)
+plot(nir)
+
+stack<- c(gre, red, nir)
+plot(stack)
+
+plotRGB(stack, r=3, g=2, b=1, stretch="lin") 
+plotRGB(stack, r=3, g=2, b=1, stretch="hist") 
+im.multiframe(1,2)
+plotRGB(stack, r=3, g=2, b=1, stretch="lin") 
+plotRGB(stack, r=3, g=2, b=1, stretch="hist") 
+
+ndvi<- im.ndvi(stack, 3,2)
+dev.off()
+plot(ndvi)
+
+#esportare dati
+writeRaster(ndvi, "ndvi.tiff")
+#importare
+ndvi2<- rast("ndvi.tiff")
+plot(ndvi2)
+
+im.multiframe(1,2)
+plot(ndvi)
+plot(ndvi2)
+
+#esportare figura non data
+im.multiframe(2,2)
+plot(nir)
+plot(red)
+plot(gre)
+plot(ndvi)
+
+png("figura1.png")
+im.multiframe(2,2)
+plot(nir)
+plot(red)
+plot(gre)
+plot(ndvi)
+
+pdf("figura1.png") #meglio questa funzione in quanto il pdf è un file vettoriale e non perde risoluzione
+im.multiframe(2,2)
+plot(nir)
+plot(red)
+plot(gre)
+plot(ndvi)
+
+p1<- im.ggplot(ndvi)
+p2<- im.ridgeline(ndvi, scale=1)
+p1 + p2
+
+pdf("figura2.png")
+p1<- im.ggplot(ndvi)
+p2<- im.ridgeline(ndvi, scale=1)
+p1 + p2
+
+
+https://github.com/ducciorocchini/Telerilevamento_2026/tree/main/Drone2
+gregt<- rast("https://raw.githubusercontent.com/ducciorocchini/Telerilevamento_2026/main/Drone2/Drone2/DJI_20260409152942_0001_MS_G.TIF")
+plot(gregt)
